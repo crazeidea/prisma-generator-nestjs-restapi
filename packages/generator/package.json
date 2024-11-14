@@ -15,22 +15,26 @@
     "dev": "npx tsc -w",
     "build": "npx tsc",
     "prepack": "yarn build",
-    "test": "jest"
+    "test": "jest",
+    "postbuild": "copyfiles -u 1 src/**/*.mustache dist/"
   },
   "dependencies": {
-    "@prisma/client": "3.12.0",
-    "@prisma/generator-helper": "3.12.0",
-    "@prisma/sdk": "3.12.0",
-    "prettier": "2.5.1"
+    "@prisma/client": "5.22.0",
+    "@prisma/generator-helper": "5.22.0",
+    "@prisma/sdk": "3.15.2",
+    "mustache": "^4.2.0",
+    "prettier": "3.3.3"
   },
   "devDependencies": {
     "@types/jest": "27.0.3",
-    "@types/node": "17.0.21",
+    "@types/mustache": "^4.2.5",
+    "@types/node": "22.9.0",
     "@types/prettier": "2.4.2",
     "jest": "27.4.7",
-    "prisma": "3.12.0",
+    "prisma": "5.22.0",
     "ts-jest": "27.1.4",
-    "typescript": "4.6.2"
+    "typescript": "5.6.3",
+    "copyfiles": "^2.4.1"
   },
   "homepage": "Link to homepage or github readme here",
   "repository": {

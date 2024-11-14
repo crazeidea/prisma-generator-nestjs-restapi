@@ -1,9 +1,10 @@
 import { generatorHandler, GeneratorOptions } from '@prisma/generator-helper'
 import { logger } from '@prisma/sdk'
-import path from 'path'
 import { GENERATOR_NAME } from './constants'
-import { genEnum } from './helpers/genEnum'
-import { writeFileSafely } from './utils/writeFileSafely'
+import { ModuleGenerator } from './generators/module/module.generator'
+import { ServiceGenerator } from './generators/service/service.generator'
+import { DTOGenerator } from './generators/dtos/dto.generator'
+import { ControllerGenerator } from './generators/controller/controller.generator'
 
 const { version } = require('../package.json')
 
@@ -17,15 +18,16 @@ generatorHandler({
     }
   },
   onGenerate: async (options: GeneratorOptions) => {
-    options.dmmf.datamodel.enums.forEach(async (enumInfo) => {
-      const tsEnum = genEnum(enumInfo)
+    const moduleGenerator = new ModuleGenerator(options)
+    const serviceGenerator = new ServiceGenerator(options)
+    const dtoGenerator = new DTOGenerator(options)
+    const controllerGenerator = new ControllerGenerator(options)
 
-      const writeLocation = path.join(
-        options.generator.output?.value!,
-        `${enumInfo.name}.ts`,
-      )
-
-      await writeFileSafely(writeLocation, tsEnum)
+    options.dmmf.datamodel.models.forEach((model) => {
+      moduleGenerator.generate(model)
+      controllerGenerator.generate(model)
+      serviceGenerator.generate(model)
+      dtoGenerator.generate(model)
     })
   },
 })
